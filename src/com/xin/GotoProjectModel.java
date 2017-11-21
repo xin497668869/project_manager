@@ -3,7 +3,6 @@
 package com.xin;
 
 import com.intellij.ide.util.PsiElementListCellRenderer;
-import com.intellij.ide.util.gotoByName.ChooseByNameItemProvider;
 import com.intellij.ide.util.gotoByName.FilteringGotoByModel;
 import com.intellij.navigation.ChooseByNameContributor;
 import com.intellij.navigation.NavigationItem;
@@ -14,7 +13,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.wm.ex.WindowManagerEx;
 import com.intellij.openapi.wm.impl.IdeFrameImpl;
-import com.intellij.psi.PsiElement;
 import com.intellij.util.indexing.FileBasedIndex;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -33,11 +31,6 @@ public class GotoProjectModel extends FilteringGotoByModel<IdeFrameImpl> impleme
     }
 
 
-    @NotNull
-    @Override
-    public ChooseByNameItemProvider getItemProvider(@Nullable PsiElement context) {
-        return new GotoProjectItemProvider(myProject, context, this);
-    }
 
     @Override
     protected boolean acceptItem(final NavigationItem item) {
@@ -53,7 +46,7 @@ public class GotoProjectModel extends FilteringGotoByModel<IdeFrameImpl> impleme
 
     @Override
     public String getPromptText() {
-        return "Enter project name:  alt + right can remove selected project";
+        return "Enter project name:     alt + right can remove selected project";
     }
 
     @Override

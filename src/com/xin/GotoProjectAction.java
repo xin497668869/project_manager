@@ -3,7 +3,6 @@ package com.xin;
 import com.intellij.ide.actions.GotoActionBase;
 import com.intellij.ide.util.gotoByName.ChooseByNameItemProvider;
 import com.intellij.ide.util.gotoByName.ChooseByNameModel;
-import com.intellij.ide.util.gotoByName.ChooseByNameModelEx;
 import com.intellij.ide.util.gotoByName.ChooseByNamePopup;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
@@ -52,7 +51,8 @@ public class GotoProjectAction extends GotoActionBase implements DumbAware {
 
         boolean mayRequestOpenInCurrentWindow = gotoFileModel.willOpenEditor() && FileEditorManagerEx.getInstanceEx(project).hasSplitOrUndockedWindows();
         Pair<String, Integer> start = getInitialText(true, e);
-        ChooseByNamePopup popup = myCreatePopup(project, gotoFileModel, ChooseByNameModelEx.getItemProvider(gotoFileModel, getPsiContext(e)), start.first,
+        ;
+        ChooseByNamePopup popup = myCreatePopup(project, gotoFileModel, new GotoProjectItemProvider(project,getPsiContext(e),gotoFileModel), start.first,
                                                 mayRequestOpenInCurrentWindow,
                                                 start.second);
 

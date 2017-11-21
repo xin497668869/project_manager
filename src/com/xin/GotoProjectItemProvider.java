@@ -9,7 +9,6 @@ import com.intellij.openapi.wm.IdeFrame;
 import com.intellij.openapi.wm.WindowManager;
 import com.intellij.openapi.wm.impl.IdeFrameImpl;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.codeStyle.FixingLayoutMatcher;
 import com.intellij.psi.codeStyle.MinusculeMatcher;
 import com.intellij.psi.codeStyle.NameUtil;
 import com.intellij.util.Processor;
@@ -46,7 +45,6 @@ public class GotoProjectItemProvider extends DefaultChooseByNameItemProvider {
                 }
             }
         }
-        FixingLayoutMatcher.fixLayout(pattern);
         return true;
     }
 
