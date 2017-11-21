@@ -1,0 +1,33 @@
+<idea-plugin>
+    <id>switch_project</id>
+    <name>switch_project</name>
+    <version>1.0</version>
+    <vendor email="497668869@qq.com" url=""></vendor>
+
+    <description>this plugin can switch the project to top window</description>
+
+    <change-notes>
+        first init
+    </change-notes>
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
+    <idea-version since-build="145.0"/>
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+    <!-- uncomment to enable plugin in all products
+    <depends>com.intellij.modules.lang</depends>
+    -->
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+    </extensions>
+
+    <actions>
+        <action id="GotoProject" class="com.xin.GotoProjectAction" text="switch project">
+            <add-to-group group-id="GoToTargetEx" anchor="before" relative-to-action="GotoClass" />
+            <keyboard-shortcut keymap="$default" first-keystroke="shift control P"/>
+        </action>
+    </actions>
+
+</idea-plugin>
