@@ -23,14 +23,14 @@ import java.util.Comparator;
  * Model for "Go to | File" action
  */
 public class GotoProjectModel extends FilteringGotoByModel<IdeFrameImpl> implements DumbAware, Comparator<Object> {
-    private final int myMaxSize;
+    private final int     myMaxSize;
+    private       Project project;
 
     public GotoProjectModel(@NotNull Project project) {
         super(project, Extensions.getExtensions(ChooseByNameContributor.FILE_EP_NAME));
+        this.project = project;
         myMaxSize = ApplicationManager.getApplication().isUnitTestMode() ? Integer.MAX_VALUE : WindowManagerEx.getInstanceEx().getFrame(project).getSize().width;
     }
-
-
 
     @Override
     protected boolean acceptItem(final NavigationItem item) {
@@ -81,7 +81,7 @@ public class GotoProjectModel extends FilteringGotoByModel<IdeFrameImpl> impleme
 
     @Override
     public PsiElementListCellRenderer getListCellRenderer() {
-        return new GotoProjectCellRenderer(myMaxSize,getProject());
+        return new GotoProjectCellRenderer(myMaxSize, getProject());
     }
 
     @Override
@@ -124,5 +124,13 @@ public class GotoProjectModel extends FilteringGotoByModel<IdeFrameImpl> impleme
     @Override
     public int compare(Object o1, Object o2) {
         return 0;
+    }
+
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
     }
 }
