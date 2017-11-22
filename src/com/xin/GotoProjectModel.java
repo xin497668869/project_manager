@@ -81,7 +81,7 @@ public class GotoProjectModel extends FilteringGotoByModel<IdeFrameImpl> impleme
 
     @Override
     public PsiElementListCellRenderer getListCellRenderer() {
-        return new GotoProjectCellRenderer(myMaxSize);
+        return new GotoProjectCellRenderer(myMaxSize,getProject());
     }
 
     @Override

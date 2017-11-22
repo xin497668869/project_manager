@@ -12,8 +12,8 @@ import org.jetbrains.annotations.Nullable;
 public class JFrameNavigate implements NavigationItem {
 
     private IdeFrameImpl     ideFrame;
-    private MinusculeMatcher pattern;
-
+    private MinusculeMatcher pattern; 
+    
     public JFrameNavigate(IdeFrameImpl ideFrame, MinusculeMatcher pattern) {
         this.ideFrame = ideFrame;
         this.pattern = pattern;

@@ -27,6 +27,7 @@ import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiFileSystemItem;
+import com.intellij.psi.codeStyle.MinusculeMatcher;
 import com.intellij.ui.ColoredListCellRenderer;
 import com.intellij.ui.SimpleTextAttributes;
 import com.intellij.ui.speedSearch.SpeedSearchUtil;
@@ -36,13 +37,16 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 
 public class GotoProjectCellRenderer extends PsiElementListCellRenderer<PsiFileSystemItem> {
-    private final int myMaxWidth;
+    private final int     myMaxWidth;
+    private final Project project;
 
-    public GotoProjectCellRenderer(int maxSize) {
+    public GotoProjectCellRenderer(int maxSize, Project project) {
         myMaxWidth = maxSize;
+        this.project = project;
     }
 
     @Override
@@ -103,19 +107,25 @@ public class GotoProjectCellRenderer extends PsiElementListCellRenderer<PsiFileS
     @Override
     protected boolean customizeNonPsiElementLeftRenderer(ColoredListCellRenderer renderer, JList list, Object value, int index, boolean selected, boolean hasFocus) {
         JFrameNavigate item = (JFrameNavigate) value;
-
         Module[] sortedModules = ModuleManager.getInstance(item.getIdeFrame().getProject()).getSortedModules();
         if (sortedModules.length > 0) {
             renderer.setIcon(ModuleType.get(sortedModules[0]).getIcon());
         }
-        SpeedSearchUtil.appendColoredFragmentForMatcher(item.getIdeFrame().getProject().getName()
+        if (!item.getIdeFrame().getProject().equals(project)) {
+            appendColorFrame(renderer, selected, item.getIdeFrame().getProject().getName(), new SimpleTextAttributes(null, null, null, 0), item.getPattern());
+        } else {
+            appendColorFrame(renderer, selected, item.getIdeFrame().getProject().getName(), new SimpleTextAttributes(null, Color.ORANGE, null, 0), item.getPattern());
+        }
+        return true;
+    }
+
+    private void appendColorFrame(ColoredListCellRenderer renderer, boolean selected, String name, SimpleTextAttributes attributes, MinusculeMatcher pattern) {
+        SpeedSearchUtil.appendColoredFragmentForMatcher(name
                 , renderer
-                , new SimpleTextAttributes(null, null, null, 0)
-                , item.getPattern()
+                , attributes
+                , pattern
                 , UIUtil.getListBackground()
                 , selected);
-
-        return true;
     }
 
     @Override

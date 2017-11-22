@@ -37,13 +37,21 @@ public class GotoProjectItemProvider extends DefaultChooseByNameItemProvider {
 
         IdeFrame[] allProjectFrames = WindowManager.getInstance().getAllProjectFrames();
         MinusculeMatcher minusculeMatcher = NameUtil.buildMatcher("*" + pattern + "*", NameUtil.MatchingCaseSensitivity.NONE);
+        JFrameNavigate activeJFrameNavigate = null;
         for (IdeFrame allProjectFrame : allProjectFrames) {
             if (allProjectFrame instanceof IdeFrameImpl && allProjectFrame.getProject() != null) {
                 if (minusculeMatcher.matches(allProjectFrame.getProject().getName())) {
                     JFrameNavigate jFrameNavigate = new JFrameNavigate((IdeFrameImpl) allProjectFrame, minusculeMatcher);
-                    consumer.process(jFrameNavigate);
+                    if (jFrameNavigate.getIdeFrame().getProject().equals(myProject)) {
+                        activeJFrameNavigate = jFrameNavigate;
+                    } else {
+                        consumer.process(jFrameNavigate);
+                    }
                 }
             }
+        }
+        if (activeJFrameNavigate != null) {
+            consumer.process(activeJFrameNavigate);
         }
         return true;
     }
