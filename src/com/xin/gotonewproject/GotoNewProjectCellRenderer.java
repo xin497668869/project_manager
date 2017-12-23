@@ -14,12 +14,9 @@
  * limitations under the License.
  */
 
-package com.xin;
+package com.xin.gotonewproject;
 
 import com.intellij.ide.util.PsiElementListCellRenderer;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleManager;
-import com.intellij.openapi.module.ModuleType;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.util.Iconable;
@@ -37,14 +34,13 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import java.awt.*;
 import java.io.File;
 
-public class GotoProjectCellRenderer extends PsiElementListCellRenderer<PsiFileSystemItem> {
-    private final int     myMaxWidth;
+public class GotoNewProjectCellRenderer extends PsiElementListCellRenderer<PsiFileSystemItem> {
+    private final int myMaxWidth;
     private final Project project;
 
-    public GotoProjectCellRenderer(int maxSize, Project project) {
+    public GotoNewProjectCellRenderer(int maxSize, Project project) {
         myMaxWidth = maxSize;
         this.project = project;
     }
@@ -106,16 +102,12 @@ public class GotoProjectCellRenderer extends PsiElementListCellRenderer<PsiFileS
 
     @Override
     protected boolean customizeNonPsiElementLeftRenderer(ColoredListCellRenderer renderer, JList list, Object value, int index, boolean selected, boolean hasFocus) {
-        JFrameNavigate item = (JFrameNavigate) value;
-        Module[] sortedModules = ModuleManager.getInstance(item.getIdeFrame().getProject()).getSortedModules();
-        if (sortedModules.length > 0) {
-            renderer.setIcon(ModuleType.get(sortedModules[0]).getIcon());
-        }
-        if (!item.getIdeFrame().getProject().equals(project)) {
-            appendColorFrame(renderer, selected, item.getIdeFrame().getProject().getName(), new SimpleTextAttributes(null, null, null, 0), item.getPattern());
-        } else {
-            appendColorFrame(renderer, selected, item.getIdeFrame().getProject().getName(), new SimpleTextAttributes(null, Color.ORANGE, null, 0), item.getPattern());
-        }
+        GotoNewProjectItemNavigate item = (GotoNewProjectItemNavigate) value;
+//        Module[] sortedModules = ModuleManager.getInstance(item.getIdeFrame().getProject()).getSortedModules();
+//        if (sortedModules.length > 0) {
+//        }
+        renderer.setIcon(item.getIcon());
+        appendColorFrame(renderer, selected, item.getProjectName() + " - " + item.getProjectBasePath(), new SimpleTextAttributes(null, null, null, 0), item.getPattern());
         return true;
     }
 

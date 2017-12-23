@@ -1,4 +1,4 @@
-package com.xin;
+package com.xin.gotonewproject;
 
 import com.intellij.ide.actions.GotoActionBase;
 import com.intellij.ide.util.gotoByName.ChooseByNameItemProvider;
@@ -10,41 +10,45 @@ import com.intellij.openapi.application.ModalityState;
 import com.intellij.openapi.fileEditor.ex.FileEditorManagerEx;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.project.impl.ProjectManagerImpl;
+import com.intellij.openapi.project.ex.ProjectManagerEx;
 import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.wm.IdeFocusManager;
-import com.intellij.openapi.wm.impl.IdeFrameImpl;
+import org.jdom.JDOMException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.IOException;
 
 import static com.intellij.ide.util.gotoByName.ChooseByNamePopup.CHOOSE_BY_NAME_POPUP_IN_PROJECT_KEY;
 
 /**
  * @author linxixin@cvte.com
  */
-public class GotoProjectAction extends GotoActionBase implements DumbAware {
-    public static final String ID = "GotoFile";
+public class GotoNewProjectAction extends GotoActionBase implements DumbAware {
+    public static final String ID = "openProject";
 
     @Override
     public void gotoActionPerformed(AnActionEvent e) {
         final Project project = e.getData(CommonDataKeys.PROJECT);
         if (project == null) return;
 
-        final GotoProjectModel gotoFileModel = new GotoProjectModel(project);
-        GotoActionBase.GotoActionCallback<IdeFrameImpl> callback = new GotoActionCallback<IdeFrameImpl>() {
+        final GotoNewProjectModel gotoFileModel = new GotoNewProjectModel(project);
+        GotoActionCallback<String> callback = new GotoActionCallback<String>() {
 
             @Override
             public void elementChosen(final ChooseByNamePopup popup, final Object element) {
 
-                if (element instanceof JFrameNavigate) {
-                    ((JFrameNavigate) element).getIdeFrame().toFront();
-                    IdeFocusManager.getGlobalInstance().doWhenFocusSettlesDown(() -> {
-                        IdeFocusManager.getGlobalInstance().requestFocus(((JFrameNavigate) element).getIdeFrame(), true);
-                    });
-
+                if(element instanceof GotoNewProjectItemNavigate) {
+                    try {
+                        String projectBasePath = ((GotoNewProjectItemNavigate) element).getProjectBasePath();
+                        if(new File(projectBasePath).exists()) {
+                            ProjectManagerEx.getInstanceEx().loadAndOpenProject(projectBasePath);
+                        }
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    } catch (JDOMException e1) {
+                        e1.printStackTrace();
+                    }
                 }
             }
         };
@@ -52,12 +56,12 @@ public class GotoProjectAction extends GotoActionBase implements DumbAware {
         boolean mayRequestOpenInCurrentWindow = gotoFileModel.willOpenEditor() && FileEditorManagerEx.getInstanceEx(project).hasSplitOrUndockedWindows();
         Pair<String, Integer> start = getInitialText(true, e);
         ;
-        ChooseByNamePopup popup = myCreatePopup(project, gotoFileModel, new GotoProjectItemProvider(project,getPsiContext(e),gotoFileModel), start.first,
+        ChooseByNamePopup popup = myCreatePopup(project, gotoFileModel, new GotoNewProjectItemProvider(project, getPsiContext(e), gotoFileModel), start.first,
                                                 mayRequestOpenInCurrentWindow,
                                                 start.second);
 
 
-        showNavigationPopup(callback, "跳转到projectWindow",
+        showNavigationPopup(callback, "open new Project",
                             popup, false);
 
     }
@@ -76,25 +80,6 @@ public class GotoProjectAction extends GotoActionBase implements DumbAware {
             @Override
             protected void initUI(Callback callback, ModalityState modalityState, boolean allowMultipleSelection) {
                 super.initUI(callback, modalityState, allowMultipleSelection);
-                myTextField.addKeyListener(new KeyAdapter() {
-                    @Override
-                    public void keyPressed(KeyEvent e) {
-                        if (myList.getSelectedValue() == EXTRA_ELEM) {
-                            return;
-                        }
-                        if (!e.isAltDown()) {
-                            return;
-                        }
-                        int keyCode = e.getKeyCode();
-                        switch (keyCode) {
-                            case KeyEvent.VK_RIGHT:
-                                JFrameNavigate elementAt = (JFrameNavigate) myList.getModel().getElementAt(getSelectedIndex());
-                                ProjectManagerImpl.getInstance().closeProject(elementAt.getIdeFrame().getProject());
-                                rebuildList(false);
-                                break;
-                        }
-                    }
-                });
             }
         };
 

@@ -21,12 +21,17 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
+        <postStartupActivity implementation="com.xin.gotonewproject.MyStartupActivity" />
     </extensions>
 
     <actions>
-        <action id="GotoProject" class="com.xin.GotoProjectAction" text="switch project">
+        <action id="GotoProject" class="com.xin.gotoproject.GotoProjectAction" text="switch project">
             <add-to-group group-id="GoToTargetEx" anchor="before" relative-to-action="GotoClass" />
             <keyboard-shortcut keymap="$default" first-keystroke="shift control P"/>
+        </action>
+        <action id="GotoNewProject" class="com.xin.gotonewproject.GotoNewProjectAction" text="open project">
+            <add-to-group group-id="GoToTargetEx" anchor="before" relative-to-action="GotoClass" />
+            <keyboard-shortcut keymap="$default" first-keystroke="shift control O"/>
         </action>
     </actions>
 

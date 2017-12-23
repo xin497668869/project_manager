@@ -1,4 +1,4 @@
-package com.xin;
+package com.xin.gotoproject;
 
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.navigation.NavigationItem;

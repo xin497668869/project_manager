@@ -1,6 +1,6 @@
 // Copyright 2000-2017 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 
-package com.xin;
+package com.xin.gotonewproject;
 
 import com.intellij.ide.util.PsiElementListCellRenderer;
 import com.intellij.ide.util.gotoByName.FilteringGotoByModel;
@@ -22,11 +22,11 @@ import java.util.Comparator;
 /**
  * Model for "Go to | File" action
  */
-public class GotoProjectModel extends FilteringGotoByModel<IdeFrameImpl> implements DumbAware, Comparator<Object> {
-    private final int     myMaxSize;
-    private       Project project;
+public class GotoNewProjectModel extends FilteringGotoByModel<IdeFrameImpl> implements DumbAware, Comparator<Object> {
+    private final int myMaxSize;
+    private Project project;
 
-    public GotoProjectModel(@NotNull Project project) {
+    public GotoNewProjectModel(@NotNull Project project) {
         super(project, Extensions.getExtensions(ChooseByNameContributor.FILE_EP_NAME));
         this.project = project;
         myMaxSize = ApplicationManager.getApplication().isUnitTestMode() ? Integer.MAX_VALUE : WindowManagerEx.getInstanceEx().getFrame(project).getSize().width;
@@ -46,7 +46,7 @@ public class GotoProjectModel extends FilteringGotoByModel<IdeFrameImpl> impleme
 
     @Override
     public String getPromptText() {
-        return "Enter project name:     alt + right can remove selected project";
+        return "Enter project name:";
     }
 
     @Override
@@ -81,7 +81,7 @@ public class GotoProjectModel extends FilteringGotoByModel<IdeFrameImpl> impleme
 
     @Override
     public PsiElementListCellRenderer getListCellRenderer() {
-        return new GotoProjectCellRenderer(myMaxSize, getProject());
+        return new GotoNewProjectCellRenderer(myMaxSize, getProject());
     }
 
     @Override
@@ -92,7 +92,7 @@ public class GotoProjectModel extends FilteringGotoByModel<IdeFrameImpl> impleme
     @Override
     @Nullable
     public String getFullName(final Object element) {
-        return element instanceof JFrameNavigate ? ((JFrameNavigate) element).getIdeFrame().getProject().getName() : "";
+        return element instanceof GotoNewProjectItemNavigate ? ((GotoNewProjectItemNavigate) element).getProjectBasePath() : "";
     }
 
 
