@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>switch_project</id>
     <name>switch_project</name>
-    <version>1.0</version>
+    <version>2.1</version>
     <vendor email="497668869@qq.com" url=""></vendor>
 
     <description>this plugin can switch the project to top window</description>
@@ -32,6 +32,9 @@
         <action id="GotoNewProject" class="com.xin.gotonewproject.GotoNewProjectAction" text="open project">
             <add-to-group group-id="GoToTargetEx" anchor="before" relative-to-action="GotoClass" />
             <keyboard-shortcut keymap="$default" first-keystroke="shift control O"/>
+        </action>
+        <action id="SearchProjectInfoAction" class="com.xin.gotonewproject.SearchProjectInfoAction" text="search project info">
+            <add-to-group group-id="GoToTargetEx" anchor="before" relative-to-action="GotoClass" />
         </action>
     </actions>
 

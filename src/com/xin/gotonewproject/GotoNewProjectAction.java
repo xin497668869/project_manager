@@ -79,6 +79,9 @@ public class GotoNewProjectAction extends GotoActionBase implements DumbAware {
         ChooseByNamePopup newPopup = new ChooseByNamePopup(project, model, provider, oldPopup, predefinedText, mayRequestOpenInCurrentWindow, initialIndex) {
             @Override
             protected void initUI(Callback callback, ModalityState modalityState, boolean allowMultipleSelection) {
+                if(myTextField.getText().isEmpty()) {
+                    myTextField.setText("*");
+                }
                 super.initUI(callback, modalityState, allowMultipleSelection);
             }
         };

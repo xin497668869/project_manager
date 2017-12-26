@@ -27,10 +27,10 @@ public class GotoNewProjectItemNavigate implements NavigationItem {
     public GotoNewProjectItemNavigate(String projectBasePath, MinusculeMatcher pattern) {
         String[] split = StringUtils.split(projectBasePath, DELIMITER);
 
-        this.projectBasePath = split[2];
+        this.projectBasePath = split[1];
         this.projectFile = new File(this.projectBasePath);
         this.projectName = split[0];
-        if (StringUtils.isEmpty(split[1])) {
+        if (split.length > 2 && StringUtils.isEmpty(split[2])) {
             this.icon = AllIcons.Nodes.IdeaModule;
         } else {
             this.icon = ModuleTypeManager.getInstance().findByID(split[1]).getIcon();

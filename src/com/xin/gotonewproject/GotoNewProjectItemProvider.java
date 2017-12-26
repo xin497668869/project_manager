@@ -41,10 +41,16 @@ public class GotoNewProjectItemProvider extends DefaultChooseByNameItemProvider 
             return true;
         }
         MinusculeMatcher minusculeMatcher = NameUtil.buildMatcher("*" + pattern + "*", NameUtil.MatchingCaseSensitivity.NONE);
-        for (String projectPath : values) {
-            GotoNewProjectItemNavigate gotoNewProjectItemNavigate = new GotoNewProjectItemNavigate(projectPath, minusculeMatcher);
-            if (gotoNewProjectItemNavigate.getProjectFile().exists()) {
-                consumer.process(gotoNewProjectItemNavigate);
+        for (int i = 0; i < values.length; i++) {
+            String projectPath = values[i];
+
+            if (minusculeMatcher.matches(projectPath)) {
+                GotoNewProjectItemNavigate gotoNewProjectItemNavigate = new GotoNewProjectItemNavigate(projectPath, minusculeMatcher);
+                if (gotoNewProjectItemNavigate.getProjectFile().exists()) {
+                    if (!consumer.process(gotoNewProjectItemNavigate)) {
+                        return true;
+                    }
+                }
             }
         }
         return true;

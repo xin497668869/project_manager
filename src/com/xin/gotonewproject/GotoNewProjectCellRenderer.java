@@ -102,12 +102,18 @@ public class GotoNewProjectCellRenderer extends PsiElementListCellRenderer<PsiFi
 
     @Override
     protected boolean customizeNonPsiElementLeftRenderer(ColoredListCellRenderer renderer, JList list, Object value, int index, boolean selected, boolean hasFocus) {
-        GotoNewProjectItemNavigate item = (GotoNewProjectItemNavigate) value;
-//        Module[] sortedModules = ModuleManager.getInstance(item.getIdeFrame().getProject()).getSortedModules();
-//        if (sortedModules.length > 0) {
-//        }
-        renderer.setIcon(item.getIcon());
-        appendColorFrame(renderer, selected, item.getProjectName() + " - " + item.getProjectBasePath(), new SimpleTextAttributes(null, null, null, 0), item.getPattern());
+        if (value instanceof String) {
+            SpeedSearchUtil.appendColoredFragmentForMatcher((String) value
+                    , renderer
+                    , new SimpleTextAttributes(null, null, null, 0)
+                    , null
+                    , UIUtil.getListBackground()
+                    , selected);
+        } else {
+            GotoNewProjectItemNavigate item = (GotoNewProjectItemNavigate) value;
+            renderer.setIcon(item.getIcon());
+            appendColorFrame(renderer, selected, item.getProjectName() + " - " + item.getProjectBasePath(), new SimpleTextAttributes(null, null, null, 0), item.getPattern());
+        }
         return true;
     }
 
