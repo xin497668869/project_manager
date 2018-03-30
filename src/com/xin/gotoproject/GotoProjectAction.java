@@ -4,19 +4,24 @@ import com.intellij.ide.actions.GotoActionBase;
 import com.intellij.ide.util.gotoByName.ChooseByNameItemProvider;
 import com.intellij.ide.util.gotoByName.ChooseByNameModel;
 import com.intellij.ide.util.gotoByName.ChooseByNamePopup;
+import com.intellij.openapi.actionSystem.ActionPlaces;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
+import com.intellij.openapi.actionSystem.impl.ActionMenuItem;
 import com.intellij.openapi.application.ModalityState;
 import com.intellij.openapi.fileEditor.ex.FileEditorManagerEx;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.impl.ProjectManagerImpl;
 import com.intellij.openapi.util.Pair;
+import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.wm.IdeFocusManager;
 import com.intellij.openapi.wm.impl.IdeFrameImpl;
+import com.intellij.util.BitUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -28,6 +33,27 @@ import static com.intellij.ide.util.gotoByName.ChooseByNamePopup.CHOOSE_BY_NAME_
 public class GotoProjectAction extends GotoActionBase implements DumbAware {
     public static final String ID = "GotoFile";
 
+    /*
+
+                if (element instanceof JFrameNavigate) {
+                    IdeFrameImpl projectFrame = ((JFrameNavigate) element).getIdeFrame();
+                    final int frameState = projectFrame.getExtendedState();
+                    boolean macMainMenu = SystemInfo.isMac && ActionPlaces.isMainMenuOrActionSearch(e.getPlace());
+                    if (macMainMenu && !(e.getInputEvent().getSource() instanceof ActionMenuItem) && (projectFrame.getExtendedState() & Frame.ICONIFIED) != 0) {
+                        // On Mac minimized window should not be restored this way
+                        return;
+                    }
+
+                    if (BitUtil.isSet(frameState, Frame.ICONIFIED)) {
+                        // restore the frame if it is minimized
+                        projectFrame.setExtendedState(frameState ^ Frame.ICONIFIED);
+                    }
+                    projectFrame.toFront();
+
+                    IdeFocusManager.getGlobalInstance().doWhenFocusSettlesDown(() -> {
+                        IdeFocusManager.getGlobalInstance().requestFocus(((JFrameNavigate) element).getIdeFrame(), true);
+                    });
+     */
     @Override
     public void gotoActionPerformed(AnActionEvent e) {
         final Project project = e.getData(CommonDataKeys.PROJECT);
@@ -40,7 +66,20 @@ public class GotoProjectAction extends GotoActionBase implements DumbAware {
             public void elementChosen(final ChooseByNamePopup popup, final Object element) {
 
                 if (element instanceof JFrameNavigate) {
-                    ((JFrameNavigate) element).getIdeFrame().toFront();
+                    IdeFrameImpl projectFrame = ((JFrameNavigate) element).getIdeFrame();
+                    final int frameState = projectFrame.getExtendedState();
+                    boolean macMainMenu = SystemInfo.isMac && ActionPlaces.isMainMenuOrActionSearch(e.getPlace());
+                    if (macMainMenu && !(e.getInputEvent().getSource() instanceof ActionMenuItem) && (projectFrame.getExtendedState() & Frame.ICONIFIED) != 0) {
+                        // On Mac minimized window should not be restored this way
+                        return;
+                    }
+
+                    if (BitUtil.isSet(frameState, Frame.ICONIFIED)) {
+                        // restore the frame if it is minimized
+                        projectFrame.setExtendedState(frameState ^ Frame.ICONIFIED);
+                    }
+                    projectFrame.toFront();
+
                     IdeFocusManager.getGlobalInstance().doWhenFocusSettlesDown(() -> {
                         IdeFocusManager.getGlobalInstance().requestFocus(((JFrameNavigate) element).getIdeFrame(), true);
                     });

@@ -15,7 +15,7 @@ public class MyStartupActivity implements StartupActivity {
 
     public static final String PROJECT_OPEN_HISTORY_LIST = "PROJECT_OPEN_HISTORY_LIST";
     public static final String PROJECT_OPEN_HISTORY_WORKSPACE = "PROJECT_OPEN_HISTORY_WORKSPACE";
-    public static final Integer PROJECT_OPEN_HISTORY_LIST_MAX = 100;
+    public static final int PROJECT_OPEN_HISTORY_LIST_MAX = 100;
     public static final String DELIMITER = "``";
 
 
@@ -23,10 +23,10 @@ public class MyStartupActivity implements StartupActivity {
     public void runActivity(@NotNull Project project) {
 
         if (PropertiesComponent.getInstance().getValue(PROJECT_OPEN_HISTORY_WORKSPACE) == null) {
-            storeProjectInfo(new SearchProjectInfoAction.ProjectInfo(project.getName(), getProjectIconId(project), project.getBasePath(), 0));
+            storeProjectInfo(new SearchProjectInfoAction.ProjectInfo(project.getName(), project.getBasePath(), getProjectIconId(project), 0));
             SearchProjectInfoAction.action(project);
         } else {
-            storeProjectInfo(new SearchProjectInfoAction.ProjectInfo(project.getName(), getProjectIconId(project), project.getBasePath(), 0));
+            storeProjectInfo(new SearchProjectInfoAction.ProjectInfo(project.getName(), project.getBasePath(), getProjectIconId(project), 0));
         }
     }
 

@@ -20,12 +20,10 @@ import org.jetbrains.annotations.Nullable;
  */
 public class GotoProjectItemProvider extends DefaultChooseByNameItemProvider {
     private final Project          myProject;
-    private final GotoProjectModel myModel;
 
     public GotoProjectItemProvider(@NotNull Project project, @Nullable PsiElement context, GotoProjectModel model) {
         super(context);
         myProject = project;
-        myModel = model;
 
     }
 

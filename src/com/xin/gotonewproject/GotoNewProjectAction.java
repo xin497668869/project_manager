@@ -4,18 +4,27 @@ import com.intellij.ide.actions.GotoActionBase;
 import com.intellij.ide.util.gotoByName.ChooseByNameItemProvider;
 import com.intellij.ide.util.gotoByName.ChooseByNameModel;
 import com.intellij.ide.util.gotoByName.ChooseByNamePopup;
+import com.intellij.openapi.actionSystem.ActionPlaces;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
+import com.intellij.openapi.actionSystem.impl.ActionMenuItem;
 import com.intellij.openapi.application.ModalityState;
 import com.intellij.openapi.fileEditor.ex.FileEditorManagerEx;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ex.ProjectManagerEx;
 import com.intellij.openapi.util.Pair;
+import com.intellij.openapi.util.SystemInfo;
+import com.intellij.openapi.wm.IdeFocusManager;
+import com.intellij.openapi.wm.WindowManager;
+import com.intellij.util.BitUtil;
+import com.xin.gotoproject.JFrameNavigate;
 import org.jdom.JDOMException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
@@ -38,11 +47,29 @@ public class GotoNewProjectAction extends GotoActionBase implements DumbAware {
             @Override
             public void elementChosen(final ChooseByNamePopup popup, final Object element) {
 
-                if(element instanceof GotoNewProjectItemNavigate) {
+                if (element instanceof GotoNewProjectItemNavigate) {
                     try {
                         String projectBasePath = ((GotoNewProjectItemNavigate) element).getProjectBasePath();
-                        if(new File(projectBasePath).exists()) {
-                            ProjectManagerEx.getInstanceEx().loadAndOpenProject(projectBasePath);
+                        if (new File(projectBasePath).exists()) {
+                            Project project1 = ProjectManagerEx.getInstanceEx().loadAndOpenProject(projectBasePath);
+                            JFrame projectFrame = WindowManager.getInstance().getFrame(project1);
+
+                            final int frameState = projectFrame.getExtendedState();
+                            boolean macMainMenu = SystemInfo.isMac && ActionPlaces.isMainMenuOrActionSearch(e.getPlace());
+                            if (macMainMenu && !(e.getInputEvent().getSource() instanceof ActionMenuItem) && (projectFrame.getExtendedState() & Frame.ICONIFIED) != 0) {
+                                // On Mac minimized window should not be restored this way
+                                return;
+                            }
+
+                            if (BitUtil.isSet(frameState, Frame.ICONIFIED)) {
+                                // restore the frame if it is minimized
+                                projectFrame.setExtendedState(frameState ^ Frame.ICONIFIED);
+                            }
+                            projectFrame.toFront();
+
+                            IdeFocusManager.getGlobalInstance().doWhenFocusSettlesDown(() -> {
+                                IdeFocusManager.getGlobalInstance().requestFocus(((JFrameNavigate) element).getIdeFrame(), true);
+                            });
                         }
                     } catch (IOException e1) {
                         e1.printStackTrace();
@@ -79,7 +106,7 @@ public class GotoNewProjectAction extends GotoActionBase implements DumbAware {
         ChooseByNamePopup newPopup = new ChooseByNamePopup(project, model, provider, oldPopup, predefinedText, mayRequestOpenInCurrentWindow, initialIndex) {
             @Override
             protected void initUI(Callback callback, ModalityState modalityState, boolean allowMultipleSelection) {
-                if(myTextField.getText().isEmpty()) {
+                if (myTextField.getText().isEmpty()) {
                     myTextField.setText("*");
                 }
                 super.initUI(callback, modalityState, allowMultipleSelection);
