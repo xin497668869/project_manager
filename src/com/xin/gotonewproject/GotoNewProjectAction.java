@@ -16,9 +16,9 @@ import com.intellij.openapi.project.ex.ProjectManagerEx;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.wm.IdeFocusManager;
+import com.intellij.openapi.wm.IdeFrame;
 import com.intellij.openapi.wm.WindowManager;
 import com.intellij.util.BitUtil;
-import com.xin.gotoproject.JFrameNavigate;
 import org.jdom.JDOMException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -52,24 +52,29 @@ public class GotoNewProjectAction extends GotoActionBase implements DumbAware {
                         String projectBasePath = ((GotoNewProjectItemNavigate) element).getProjectBasePath();
                         if (new File(projectBasePath).exists()) {
                             Project project1 = ProjectManagerEx.getInstanceEx().loadAndOpenProject(projectBasePath);
-                            JFrame projectFrame = WindowManager.getInstance().getFrame(project1);
+                            if (project1.isDisposed()) {
+                                for (IdeFrame ideFrame : WindowManager.getInstance().getAllProjectFrames()) {
+                                        if(ideFrame.getProject().getBasePath().equals(projectBasePath)) {
+                                            JFrame projectFrame = (JFrame) ideFrame;
+                                            final int frameState = projectFrame.getExtendedState();
+                                            boolean macMainMenu = SystemInfo.isMac && ActionPlaces.isMainMenuOrActionSearch(e.getPlace());
+                                            if (macMainMenu && !(e.getInputEvent().getSource() instanceof ActionMenuItem) && (projectFrame.getExtendedState() & Frame.ICONIFIED) != 0) {
+                                                // On Mac minimized window should not be restored this way
+                                                return;
+                                            }
 
-                            final int frameState = projectFrame.getExtendedState();
-                            boolean macMainMenu = SystemInfo.isMac && ActionPlaces.isMainMenuOrActionSearch(e.getPlace());
-                            if (macMainMenu && !(e.getInputEvent().getSource() instanceof ActionMenuItem) && (projectFrame.getExtendedState() & Frame.ICONIFIED) != 0) {
-                                // On Mac minimized window should not be restored this way
-                                return;
+                                            if (BitUtil.isSet(frameState, Frame.ICONIFIED)) {
+                                                // restore the frame if it is minimized
+                                                projectFrame.setExtendedState(frameState ^ Frame.ICONIFIED);
+                                            }
+                                            projectFrame.toFront();
+
+                                            IdeFocusManager.getGlobalInstance().doWhenFocusSettlesDown(() -> {
+                                                IdeFocusManager.getGlobalInstance().requestFocus(projectFrame, true);
+                                            });
+                                        }
+                                }
                             }
-
-                            if (BitUtil.isSet(frameState, Frame.ICONIFIED)) {
-                                // restore the frame if it is minimized
-                                projectFrame.setExtendedState(frameState ^ Frame.ICONIFIED);
-                            }
-                            projectFrame.toFront();
-
-                            IdeFocusManager.getGlobalInstance().doWhenFocusSettlesDown(() -> {
-                                IdeFocusManager.getGlobalInstance().requestFocus(((JFrameNavigate) element).getIdeFrame(), true);
-                            });
                         }
                     } catch (IOException e1) {
                         e1.printStackTrace();

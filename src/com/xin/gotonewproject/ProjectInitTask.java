@@ -50,7 +50,7 @@ public class ProjectInitTask extends Backgroundable {
                 } else {
                     lastModified = workspace.lastModified();
                 }
-                SearchProjectInfoAction.ProjectInfo projectInfo = new SearchProjectInfoAction.ProjectInfo(projectName, workspace.getAbsolutePath(), "", lastModified);
+                SearchProjectInfoAction.ProjectInfo projectInfo = new SearchProjectInfoAction.ProjectInfo(projectName, workspace.getParent(), "", lastModified);
                 projectInfoList.add(projectInfo);
                 return true;
             }
