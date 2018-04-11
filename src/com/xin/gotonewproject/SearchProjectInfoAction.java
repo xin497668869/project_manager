@@ -81,7 +81,6 @@ public class SearchProjectInfoAction extends AnAction {
                 }
             }
             ProgressManager.getInstance().run(new ProjectInitTask(project, workspace));
-
         }
     }
 }

@@ -24,6 +24,7 @@ public class MyStartupActivity implements StartupActivity {
 
         if (PropertiesComponent.getInstance().getValue(PROJECT_OPEN_HISTORY_WORKSPACE) == null) {
             storeProjectInfo(new SearchProjectInfoAction.ProjectInfo(project.getName(), project.getBasePath().replace("\\", "/"), getProjectIconId(project), 0));
+            PropertiesComponent.getInstance().setValue(PROJECT_OPEN_HISTORY_WORKSPACE,"");
             SearchProjectInfoAction.action(project);
         } else {
             storeProjectInfo(new SearchProjectInfoAction.ProjectInfo(project.getName(), project.getBasePath().replace("\\", "/"), getProjectIconId(project), 0));

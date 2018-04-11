@@ -35,24 +35,29 @@ public class ProjectInitTask extends Backgroundable {
         }
 
         if (workspace.isDirectory()) {
-            for (File file : workspace.listFiles()) {
-                if (searchProject(file, projectInfoList)) {
-                    return false;
+            if (workspace.getName().lastIndexOf(".idea") >= 0) {
+                File[] imlFile = new File(workspace.getParent()).listFiles((dir, name) -> name.lastIndexOf(".iml") >= 0);
+                if (imlFile != null && imlFile.length > 0) {
+                    String projectName = imlFile[0].getName().substring(0, imlFile[0].getName().lastIndexOf(".iml"));
+                    File file = new File(workspace, "workspace.xml");
+                    long lastModified;
+                    if (file.exists()) {
+                        lastModified = file.lastModified();
+                    } else {
+                        lastModified = workspace.lastModified();
+                    }
+                    SearchProjectInfoAction.ProjectInfo projectInfo = new SearchProjectInfoAction.ProjectInfo(projectName, workspace.getParent().replace("\\", "/"), "", lastModified);
+                    projectInfoList.add(projectInfo);
                 }
-            }
-        } else {
-            if (workspace.getName().lastIndexOf(".iml") > 0) {
-                String projectName = workspace.getName().substring(0, workspace.getName().lastIndexOf(".iml"));
-                File file = new File(workspace.getParent(), ".idea/workspace.xml");
-                long lastModified;
-                if (file.exists()) {
-                    lastModified = file.lastModified();
-                } else {
-                    lastModified = workspace.lastModified();
-                }
-                SearchProjectInfoAction.ProjectInfo projectInfo = new SearchProjectInfoAction.ProjectInfo(projectName, workspace.getParent().replace("\\", "/"), "", lastModified);
-                projectInfoList.add(projectInfo);
                 return true;
+            }
+
+            for (File file : workspace.listFiles()) {
+                if (workspace.getName().lastIndexOf(".git") < 0) {
+                    if (searchProject(file, projectInfoList)) {
+                        return false;
+                    }
+                }
             }
         }
         return false;

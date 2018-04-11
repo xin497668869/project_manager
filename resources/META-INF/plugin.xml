@@ -1,7 +1,7 @@
 <idea-plugin>
-    <id>switch_project</id>
-    <name>switch_project</name>
-    <version>2.1</version>
+    <id>project_manager</id>
+    <name>project_manager</name>
+    <version>1.0</version>
     <vendor email="497668869@qq.com" url=""></vendor>
 
     <description>this plugin can switch the project to top window</description>
@@ -25,17 +25,23 @@
     </extensions>
 
     <actions>
-        <action id="GotoProject" class="com.xin.gotoproject.GotoProjectAction" text="switch project">
-            <add-to-group group-id="GoToTargetEx" anchor="before" relative-to-action="GotoClass" />
+
+
+        <action id="GotoProject" class="com.xin.gotoproject.GotoProjectAction" text="Switch Project" description="切换项目">
             <keyboard-shortcut keymap="$default" first-keystroke="shift control P"/>
         </action>
-        <action id="GotoNewProject" class="com.xin.gotonewproject.GotoNewProjectAction" text="open project">
-            <add-to-group group-id="GoToTargetEx" anchor="before" relative-to-action="GotoClass" />
+        <action id="GotoNewProject" class="com.xin.gotonewproject.GotoNewProjectAction" text="Open Project" description="打开项目">
             <keyboard-shortcut keymap="$default" first-keystroke="shift control O"/>
         </action>
-        <action id="SearchProjectInfoAction" class="com.xin.gotonewproject.SearchProjectInfoAction" text="search project info">
-            <add-to-group group-id="GoToTargetEx" anchor="before" relative-to-action="GotoClass" />
+        <action id="SearchProjectInfoAction" class="com.xin.gotonewproject.SearchProjectInfoAction" text="Edit And Search Workspaces" description="编辑并搜索项目路径">
         </action>
+
+        <group popup="true" id="project_manager_group" text="Project Manager">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+            <reference ref="GotoProject"/>
+            <reference ref="GotoNewProject"/>
+            <reference ref="SearchProjectInfoAction"/>
+        </group>
     </actions>
 
 </idea-plugin>
