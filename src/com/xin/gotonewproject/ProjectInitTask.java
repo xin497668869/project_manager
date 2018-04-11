@@ -20,7 +20,7 @@ import static com.xin.gotonewproject.MyStartupActivity.PROJECT_OPEN_HISTORY_WORK
  */
 public class ProjectInitTask extends Backgroundable {
     private boolean stopScan = true;
-    private String workspace;
+    private String  workspace;
 
     public ProjectInitTask(@Nullable Project project, String workspace) {
         super(project, "scanning workspace", true);
@@ -50,7 +50,7 @@ public class ProjectInitTask extends Backgroundable {
                 } else {
                     lastModified = workspace.lastModified();
                 }
-                SearchProjectInfoAction.ProjectInfo projectInfo = new SearchProjectInfoAction.ProjectInfo(projectName, workspace.getParent(), "", lastModified);
+                SearchProjectInfoAction.ProjectInfo projectInfo = new SearchProjectInfoAction.ProjectInfo(projectName, workspace.getParent().replace("\\", "/"), "", lastModified);
                 projectInfoList.add(projectInfo);
                 return true;
             }

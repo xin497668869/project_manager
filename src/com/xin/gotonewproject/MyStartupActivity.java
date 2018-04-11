@@ -13,20 +13,20 @@ import org.jetbrains.annotations.NotNull;
  */
 public class MyStartupActivity implements StartupActivity {
 
-    public static final String PROJECT_OPEN_HISTORY_LIST = "PROJECT_OPEN_HISTORY_LIST";
+    public static final String PROJECT_OPEN_HISTORY_LIST      = "PROJECT_OPEN_HISTORY_LIST";
     public static final String PROJECT_OPEN_HISTORY_WORKSPACE = "PROJECT_OPEN_HISTORY_WORKSPACE";
-    public static final int PROJECT_OPEN_HISTORY_LIST_MAX = 100;
-    public static final String DELIMITER = "``";
+    public static final int    PROJECT_OPEN_HISTORY_LIST_MAX  = 100;
+    public static final String DELIMITER                      = "``";
 
 
     @Override
     public void runActivity(@NotNull Project project) {
 
         if (PropertiesComponent.getInstance().getValue(PROJECT_OPEN_HISTORY_WORKSPACE) == null) {
-            storeProjectInfo(new SearchProjectInfoAction.ProjectInfo(project.getName(), project.getBasePath(), getProjectIconId(project), 0));
+            storeProjectInfo(new SearchProjectInfoAction.ProjectInfo(project.getName(), project.getBasePath().replace("\\", "/"), getProjectIconId(project), 0));
             SearchProjectInfoAction.action(project);
         } else {
-            storeProjectInfo(new SearchProjectInfoAction.ProjectInfo(project.getName(), project.getBasePath(), getProjectIconId(project), 0));
+            storeProjectInfo(new SearchProjectInfoAction.ProjectInfo(project.getName(), project.getBasePath().replace("\\", "/"), getProjectIconId(project), 0));
         }
     }
 
@@ -49,7 +49,7 @@ public class MyStartupActivity implements StartupActivity {
                 break;
             }
             String[] split = StringUtils.split(values[i], DELIMITER);
-            if (split[0].equals(projectInfo.getProjectName()) && split[1].equals(projectInfo.getProjectPath())) {
+            if (split[0].equals(projectInfo.getProjectName()) && split[1].equals(projectInfo.getProjectPath().replace("\\", "/"))) {
                 break;
             }
         }
