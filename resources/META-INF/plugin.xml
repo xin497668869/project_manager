@@ -2,12 +2,16 @@
     <id>project_manager</id>
     <name>project_manager</name>
     <version>1.0</version>
-    <vendor email="497668869@qq.com" url=""></vendor>
+    <vendor email="497668869@qq.com" url="https://github.com/xin497668869"></vendor>
 
-    <description>this plugin can switch the project to top window</description>
+    <description>
+        Fuzzy search project and switch project or open a project
+        See the GitHub project in detail
+        https://github.com/xin497668869/project_manager/blob/master/README.md
+    </description>
 
     <change-notes>
-        first init
+
     </change-notes>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->

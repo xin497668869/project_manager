@@ -46,7 +46,7 @@ public class GotoNewProjectModel extends FilteringGotoByModel<IdeFrameImpl> impl
 
     @Override
     public String getPromptText() {
-        return "Enter project name:";
+        return "Enter Project Name:";
     }
 
     @Override
@@ -61,12 +61,12 @@ public class GotoNewProjectModel extends FilteringGotoByModel<IdeFrameImpl> impl
 
     @Override
     public String getNotInMessage() {
-        return "no project found";
+        return "No Project Found";
     }
 
     @Override
     public String getNotFoundMessage() {
-        return "no project found";
+        return "No Project Found";
     }
 
     @Override

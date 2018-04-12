@@ -46,7 +46,7 @@ public class GotoProjectModel extends FilteringGotoByModel<IdeFrameImpl> impleme
 
     @Override
     public String getPromptText() {
-        return "Enter project name:     alt + right can remove selected project";
+        return "Enter Project Name:   alt + right can remove selected project";
     }
 
     @Override

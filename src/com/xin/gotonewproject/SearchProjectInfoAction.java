@@ -68,11 +68,11 @@ public class SearchProjectInfoAction extends AnAction {
             workspace = "";
         }
 
-        workspace = Messages.showInputDialog(project, "请输入初始化workspace, 以查找所有项目支持打开项目操作", "提示", null, workspace, null);
+        workspace = Messages.showInputDialog(project, "Workspace Path To Search Project", "Tips", null, workspace, null);
         if (!StringUtils.isEmpty(workspace)) {
             while (true) {
                 if (!new File(workspace).exists()) {
-                    workspace = Messages.showInputDialog(project, "上次编辑的路径不正确, 请重新设置", "提示", null, "workspace", null);
+                    workspace = Messages.showInputDialog(project, "Wrong Workspaces Path", "Tips", null, "workspace", null);
                     if (StringUtils.isEmpty(workspace)) {
                         return;
                     }
