@@ -25,7 +25,7 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
-        <postStartupActivity implementation="com.xin.gotonewproject.MyStartupActivity" />
+        <postStartupActivity implementation="com.xin.gotonewproject.MyStartupActivity"/>
     </extensions>
 
     <actions>
@@ -34,10 +34,12 @@
         <action id="GotoProject" class="com.xin.gotoproject.GotoProjectAction" text="Switch Project" description="切换项目">
             <keyboard-shortcut keymap="$default" first-keystroke="shift control P"/>
         </action>
-        <action id="GotoNewProject" class="com.xin.gotonewproject.GotoNewProjectAction" text="Open Project" description="打开项目">
+        <action id="GotoNewProject" class="com.xin.gotonewproject.GotoNewProjectAction" text="Open Project"
+                description="打开项目">
             <keyboard-shortcut keymap="$default" first-keystroke="shift control O"/>
         </action>
-        <action id="SearchProjectInfoAction" class="com.xin.gotonewproject.SearchProjectInfoAction" text="Edit And Search Workspaces" description="编辑并搜索项目路径">
+        <action id="SearchProjectInfoAction" class="com.xin.gotonewproject.SearchProjectInfoAction"
+                text="Edit And Search Workspaces" description="编辑并搜索项目路径">
         </action>
 
         <group popup="true" id="project_manager_group" text="Project Manager">

@@ -60,6 +60,7 @@ public class GotoNewProjectAction extends GotoActionBase implements DumbAware {
                                         boolean macMainMenu = SystemInfo.isMac && ActionPlaces.isMainMenuOrActionSearch(e.getPlace());
                                         if (macMainMenu && !(e.getInputEvent().getSource() instanceof ActionMenuItem) && (projectFrame.getExtendedState() & Frame.ICONIFIED) != 0) {
                                             // On Mac minimized window should not be restored this way
+                                            projectFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
                                             return;
                                         }
 
@@ -68,7 +69,7 @@ public class GotoNewProjectAction extends GotoActionBase implements DumbAware {
                                             projectFrame.setExtendedState(frameState ^ Frame.ICONIFIED);
                                         }
                                         projectFrame.toFront();
-
+                                        projectFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
                                         IdeFocusManager.getGlobalInstance().doWhenFocusSettlesDown(() -> {
                                             IdeFocusManager.getGlobalInstance().requestFocus(projectFrame, true);
                                         });

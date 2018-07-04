@@ -21,6 +21,7 @@ import com.intellij.util.BitUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -79,7 +80,7 @@ public class GotoProjectAction extends GotoActionBase implements DumbAware {
                         projectFrame.setExtendedState(frameState ^ Frame.ICONIFIED);
                     }
                     projectFrame.toFront();
-
+                    projectFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
                     IdeFocusManager.getGlobalInstance().doWhenFocusSettlesDown(() -> {
                         IdeFocusManager.getGlobalInstance().requestFocus(((JFrameNavigate) element).getIdeFrame(), true);
                     });
@@ -91,7 +92,7 @@ public class GotoProjectAction extends GotoActionBase implements DumbAware {
         boolean mayRequestOpenInCurrentWindow = gotoFileModel.willOpenEditor() && FileEditorManagerEx.getInstanceEx(project).hasSplitOrUndockedWindows();
         Pair<String, Integer> start = getInitialText(true, e);
         ;
-        ChooseByNamePopup popup = myCreatePopup(project, gotoFileModel, new GotoProjectItemProvider(project,getPsiContext(e),gotoFileModel), start.first,
+        ChooseByNamePopup popup = myCreatePopup(project, gotoFileModel, new GotoProjectItemProvider(project, getPsiContext(e), gotoFileModel), start.first,
                                                 mayRequestOpenInCurrentWindow,
                                                 start.second);
 
@@ -115,7 +116,7 @@ public class GotoProjectAction extends GotoActionBase implements DumbAware {
             @Override
             protected void initUI(Callback callback, ModalityState modalityState, boolean allowMultipleSelection) {
                 super.initUI(callback, modalityState, allowMultipleSelection);
-                if(myTextField.getText().isEmpty()) {
+                if (myTextField.getText().isEmpty()) {
                     myTextField.setText("*");
                 }
                 myTextField.addKeyListener(new KeyAdapter() {
