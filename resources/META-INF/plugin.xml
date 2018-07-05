@@ -31,6 +31,12 @@
     <actions>
 
 
+        <action id="focusEditor" class="com.xin.EditorFocusAction" text="focus in editor" description="编辑框焦点">
+            <keyboard-shortcut keymap="$default" first-keystroke="control 0"/>
+        </action>
+        <action id="deleteFile" class="com.xin.DeleteFileAction" text="delete file" description="文件删除">
+            <keyboard-shortcut keymap="$default" first-keystroke="control 0"/>
+        </action>
         <action id="GotoProject" class="com.xin.gotoproject.GotoProjectAction" text="Switch Project" description="切换项目">
             <keyboard-shortcut keymap="$default" first-keystroke="shift control P"/>
         </action>

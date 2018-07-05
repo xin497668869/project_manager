@@ -9,6 +9,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.impl.ActionMenuItem;
 import com.intellij.openapi.application.ModalityState;
+import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.fileEditor.ex.FileEditorManagerEx;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
@@ -83,6 +84,10 @@ public class GotoProjectAction extends GotoActionBase implements DumbAware {
                     projectFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
                     IdeFocusManager.getGlobalInstance().doWhenFocusSettlesDown(() -> {
                         IdeFocusManager.getGlobalInstance().requestFocus(((JFrameNavigate) element).getIdeFrame(), true);
+                        JComponent myEditorComponent = FileEditorManager.getInstance(e.getProject()).getSelectedTextEditor().getContentComponent();
+                        if (IdeFocusManager.getGlobalInstance().getFocusOwner() != myEditorComponent) { //IDEA-64501
+                            IdeFocusManager.getGlobalInstance().requestFocus(myEditorComponent, true);
+                        }
                     });
 
                 }
