@@ -20,11 +20,11 @@ import static com.xin.gotonewproject.MyStartupActivity.PROJECT_OPEN_HISTORY_WORK
  */
 public class ProjectInitTask extends Backgroundable {
     private boolean stopScan = true;
-    private String  workspace;
+    private String workspaces;
 
-    public ProjectInitTask(@Nullable Project project, String workspace) {
+    public ProjectInitTask(@Nullable Project project, String workspaces) {
         super(project, "scanning workspace", true);
-        this.workspace = workspace;
+        this.workspaces = workspaces;
         this.stopScan = false;
     }
 
@@ -35,10 +35,13 @@ public class ProjectInitTask extends Backgroundable {
         }
 
         if (workspace.isDirectory()) {
-            if (workspace.getName().lastIndexOf(".idea") >= 0) {
+            if (workspace.getName()
+                         .lastIndexOf(".idea") >= 0) {
                 File[] imlFile = new File(workspace.getParent()).listFiles((dir, name) -> name.lastIndexOf(".iml") >= 0);
                 if (imlFile != null && imlFile.length > 0) {
-                    String projectName = imlFile[0].getName().substring(0, imlFile[0].getName().lastIndexOf(".iml"));
+                    String projectName = imlFile[0].getName()
+                                                   .substring(0, imlFile[0].getName()
+                                                                           .lastIndexOf(".iml"));
                     File file = new File(workspace, "workspace.xml");
                     long lastModified;
                     if (file.exists()) {
@@ -46,14 +49,18 @@ public class ProjectInitTask extends Backgroundable {
                     } else {
                         lastModified = workspace.lastModified();
                     }
-                    SearchProjectInfoAction.ProjectInfo projectInfo = new SearchProjectInfoAction.ProjectInfo(projectName, workspace.getParent().replace("\\", "/"), "", lastModified);
+                    SearchProjectInfoAction.ProjectInfo projectInfo = new SearchProjectInfoAction.ProjectInfo(projectName,
+                                                                                                              workspace.getParent()
+                                                                                                                       .replace("\\", "/"),
+                                                                                                              "", lastModified);
                     projectInfoList.add(projectInfo);
                 }
                 return true;
             }
 
             for (File file : workspace.listFiles()) {
-                if (workspace.getName().lastIndexOf(".git") < 0) {
+                if (workspace.getName()
+                             .lastIndexOf(".git") < 0) {
                     if (searchProject(file, projectInfoList)) {
                         return false;
                     }
@@ -72,17 +79,22 @@ public class ProjectInitTask extends Backgroundable {
     @Override
     public void run(@NotNull ProgressIndicator indicator) {
         List<SearchProjectInfoAction.ProjectInfo> projectInfos = new ArrayList<>();
-        searchProject(new File(workspace), projectInfos);
-        PropertiesComponent.getInstance().setValue(PROJECT_OPEN_HISTORY_WORKSPACE, workspace);
-        projectInfos.sort(Comparator.comparing(e -> -e.getLastModify()));
-        if (projectInfos.size() > PROJECT_OPEN_HISTORY_LIST_MAX) {
-            projectInfos = projectInfos.subList(0, PROJECT_OPEN_HISTORY_LIST_MAX);
-        }
-        for (int i = projectInfos.size() - 1; i >= 0; i--) {
-            if (stopScan) {
-                break;
+        PropertiesComponent.getInstance()
+                           .setValue(PROJECT_OPEN_HISTORY_WORKSPACE, workspaces);
+        for (String workspace : workspaces.split(";")) {
+            searchProject(new File(workspace), projectInfos);
+        ;
+            projectInfos.sort(Comparator.comparing(e -> -e.getLastModify()));
+            if (projectInfos.size() > PROJECT_OPEN_HISTORY_LIST_MAX) {
+                projectInfos = projectInfos.subList(0, PROJECT_OPEN_HISTORY_LIST_MAX);
             }
-            MyStartupActivity.storeProjectInfo(projectInfos.get(i));
+            for (int i = projectInfos.size() - 1; i >= 0; i--) {
+                if (stopScan) {
+                    break;
+                }
+                MyStartupActivity.storeProjectInfo(projectInfos.get(i));
+            }
+
         }
 
     }

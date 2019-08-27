@@ -18,6 +18,42 @@ import static com.xin.gotonewproject.MyStartupActivity.PROJECT_OPEN_HISTORY_WORK
  */
 public class SearchProjectInfoAction extends AnAction {
 
+    public static void action(Project project) {
+        String workspaces = PropertiesComponent.getInstance()
+                                               .getValue(PROJECT_OPEN_HISTORY_WORKSPACE);
+        if (workspaces == null) {
+            workspaces = "";
+        }
+
+        workspaces = Messages.showInputDialog(project, "请填写workspace来搜索项目, 多个路径用 ; 分割路径", "Tips", null, workspaces, null);
+        if (validateWorkSpace(project, workspaces)) {
+            ProgressManager.getInstance()
+                           .run(new ProjectInitTask(project, workspaces));
+        }
+    }
+
+    public static boolean validateWorkSpace(Project project, String workspaces) {
+        if (!StringUtils.isEmpty(workspaces)) {
+            while (true) {
+                for (String workspace : workspaces.split(";")) {
+                    if (!new File(workspace).exists()) {
+                        workspaces = Messages.showInputDialog(project, "错误的workspace路径", "Tips", null, "workspace", null);
+                        if (StringUtils.isEmpty(workspaces)) {
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public void actionPerformed(AnActionEvent anActionEvent) {
+        action(anActionEvent.getProject());
+    }
 
     public static class ProjectInfo {
         private String projectName;
@@ -53,34 +89,6 @@ public class SearchProjectInfoAction extends AnAction {
 
         public long getLastModify() {
             return lastModify;
-        }
-    }
-
-
-    @Override
-    public void actionPerformed(AnActionEvent anActionEvent) {
-        action(anActionEvent.getProject());
-    }
-
-    public static void action(Project project) {
-        String workspace = PropertiesComponent.getInstance().getValue(PROJECT_OPEN_HISTORY_WORKSPACE);
-        if (workspace == null) {
-            workspace = "";
-        }
-
-        workspace = Messages.showInputDialog(project, "Workspace Path To Search Project", "Tips", null, workspace, null);
-        if (!StringUtils.isEmpty(workspace)) {
-            while (true) {
-                if (!new File(workspace).exists()) {
-                    workspace = Messages.showInputDialog(project, "Wrong Workspaces Path", "Tips", null, "workspace", null);
-                    if (StringUtils.isEmpty(workspace)) {
-                        return;
-                    }
-                } else {
-                    break;
-                }
-            }
-            ProgressManager.getInstance().run(new ProjectInitTask(project, workspace));
         }
     }
 }

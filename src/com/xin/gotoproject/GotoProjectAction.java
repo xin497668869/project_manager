@@ -84,7 +84,7 @@ public class GotoProjectAction extends GotoActionBase implements DumbAware {
                     projectFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
                     IdeFocusManager.getGlobalInstance().doWhenFocusSettlesDown(() -> {
                         IdeFocusManager.getGlobalInstance().requestFocus(((JFrameNavigate) element).getIdeFrame(), true);
-                        JComponent myEditorComponent = FileEditorManager.getInstance(e.getProject()).getSelectedTextEditor().getContentComponent();
+                        JComponent myEditorComponent = FileEditorManager.getInstance(projectFrame.getProject()).getSelectedTextEditor().getContentComponent();
                         if (IdeFocusManager.getGlobalInstance().getFocusOwner() != myEditorComponent) { //IDEA-64501
                             IdeFocusManager.getGlobalInstance().requestFocus(myEditorComponent, true);
                         }
@@ -130,9 +130,9 @@ public class GotoProjectAction extends GotoActionBase implements DumbAware {
                         if (myList.getSelectedValue() == EXTRA_ELEM) {
                             return;
                         }
-                        if (!e.isAltDown()) {
-                            return;
-                        }
+//                        if (!e.isAltDown()) {
+//                            return;
+//                        }
                         int keyCode = e.getKeyCode();
                         switch (keyCode) {
                             case KeyEvent.VK_RIGHT:

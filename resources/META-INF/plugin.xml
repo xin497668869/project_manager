@@ -31,6 +31,26 @@
     <actions>
 
 
+        <action id="DebugPanelToggle" class="com.xin.bugfix.DebugPanelShow"
+                text="debug panel toggle" description="Debug模块隐藏">
+            <keyboard-shortcut keymap="$default" first-keystroke="control 0"/>
+        </action>
+        <action id="SelectWordAtCaret" class="com.intellij.openapi.editor.actions.SelectWordAtCaretAction"
+                text="expand select" description="拓展选择">
+            <keyboard-shortcut keymap="$default" first-keystroke="control 0"/>
+        </action>
+        <action id="StopBracketPosition" class="com.xin.bracket.StopBracketPosition" text="stop bracket position"
+                description="停止括号匹配">
+            <keyboard-shortcut keymap="$default" first-keystroke="control 0"/>
+        </action>
+        <action id="previousBracketPosition" class="com.xin.bracket.PreviousBracketPositionAction"
+                text="previous bracket position" description="上一个括号位置">
+            <keyboard-shortcut keymap="$default" first-keystroke="control 0"/>
+        </action>
+        <action id="nextBracketPosition" class="com.xin.bracket.NextBracketPositionAction" text="next bracket position"
+                description="下一个括号位置">
+            <keyboard-shortcut keymap="$default" first-keystroke="control 0"/>
+        </action>
         <action id="focusEditor" class="com.xin.EditorFocusAction" text="focus in editor" description="编辑框焦点">
             <keyboard-shortcut keymap="$default" first-keystroke="control 0"/>
         </action>
@@ -47,7 +67,6 @@
         <action id="SearchProjectInfoAction" class="com.xin.gotonewproject.SearchProjectInfoAction"
                 text="Edit And Search Workspaces" description="编辑并搜索项目路径">
         </action>
-
         <group popup="true" id="project_manager_group" text="Project Manager">
             <add-to-group group-id="ToolsMenu" anchor="last"/>
             <reference ref="GotoProject"/>
