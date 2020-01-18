@@ -7,7 +7,6 @@ import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.IdeFrame;
 import com.intellij.openapi.wm.WindowManager;
-import com.intellij.openapi.wm.impl.IdeFrameImpl;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.codeStyle.MinusculeMatcher;
 import com.intellij.psi.codeStyle.NameUtil;
@@ -19,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
  * @author peter
  */
 public class GotoProjectItemProvider extends DefaultChooseByNameItemProvider {
-    private final Project          myProject;
+    private final Project myProject;
 
     public GotoProjectItemProvider(@NotNull Project project, @Nullable PsiElement context, GotoProjectModel model) {
         super(context);
@@ -34,26 +33,28 @@ public class GotoProjectItemProvider extends DefaultChooseByNameItemProvider {
                                   @NotNull ProgressIndicator indicator,
                                   @NotNull Processor<Object> consumer) {
 
-        IdeFrame[] allProjectFrames = WindowManager.getInstance().getAllProjectFrames();
+        IdeFrame[] allProjectFrames = WindowManager.getInstance()
+                                                   .getAllProjectFrames();
         MinusculeMatcher minusculeMatcher = NameUtil.buildMatcher("*" + pattern + "*", NameUtil.MatchingCaseSensitivity.NONE);
-        JFrameNavigate activeJFrameNavigate = null;
-        for (IdeFrame allProjectFrame : allProjectFrames) {
-            if (allProjectFrame instanceof IdeFrameImpl && allProjectFrame.getProject() != null) {
-                if (minusculeMatcher.matches(allProjectFrame.getProject().getName())) {
-                    JFrameNavigate jFrameNavigate = new JFrameNavigate((IdeFrameImpl) allProjectFrame, minusculeMatcher);
-                    if (jFrameNavigate.getIdeFrame().getProject().equals(myProject)) {
-                        activeJFrameNavigate = jFrameNavigate;
+        ProjectNavigate activeProjectNavigate = null;
+        for (IdeFrame ideFrame : allProjectFrames) {
+            if (ideFrame.getProject() != null) {
+                if (minusculeMatcher.matches(ideFrame.getProject()
+                                                     .getName())) {
+                    ProjectNavigate projectNavigate = new ProjectNavigate(ideFrame.getProject(), minusculeMatcher);
+                    if (projectNavigate.getProject()
+                                       .equals(myProject)) {
+                        activeProjectNavigate = projectNavigate;
                     } else {
-                        consumer.process(jFrameNavigate);
+                        consumer.process(projectNavigate);
                     }
                 }
             }
         }
-        if (activeJFrameNavigate != null) {
-            consumer.process(activeJFrameNavigate);
+        if (activeProjectNavigate != null) {
+            consumer.process(activeProjectNavigate);
         }
         return true;
     }
-
 
 }

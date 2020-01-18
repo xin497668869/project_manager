@@ -106,15 +106,15 @@ public class GotoProjectCellRenderer extends PsiElementListCellRenderer<PsiFileS
 
     @Override
     protected boolean customizeNonPsiElementLeftRenderer(ColoredListCellRenderer renderer, JList list, Object value, int index, boolean selected, boolean hasFocus) {
-        JFrameNavigate item = (JFrameNavigate) value;
-        Module[] sortedModules = ModuleManager.getInstance(item.getIdeFrame().getProject()).getSortedModules();
+        ProjectNavigate item = (ProjectNavigate) value;
+        Module[] sortedModules = ModuleManager.getInstance(item.getProject()).getSortedModules();
         if (sortedModules.length > 0) {
             renderer.setIcon(ModuleType.get(sortedModules[0]).getIcon());
         }
-        if (!item.getIdeFrame().getProject().equals(project)) {
-            appendColorFrame(renderer, selected, item.getIdeFrame().getProject().getName(), new SimpleTextAttributes(null, null, null, 0), item.getPattern());
+        if (!item.getProject().equals(project)) {
+            appendColorFrame(renderer, selected, item.getProject().getName(), new SimpleTextAttributes(null, null, null, 0), item.getPattern());
         } else {
-            appendColorFrame(renderer, selected, item.getIdeFrame().getProject().getName(), new SimpleTextAttributes(null, Color.ORANGE, null, 0), item.getPattern());
+            appendColorFrame(renderer, selected, item.getProject().getName(), new SimpleTextAttributes(null, Color.ORANGE, null, 0), item.getPattern());
         }
         return true;
     }

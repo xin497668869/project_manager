@@ -4,26 +4,18 @@ import com.intellij.ide.actions.GotoActionBase;
 import com.intellij.ide.util.gotoByName.ChooseByNameItemProvider;
 import com.intellij.ide.util.gotoByName.ChooseByNameModel;
 import com.intellij.ide.util.gotoByName.ChooseByNamePopup;
-import com.intellij.openapi.actionSystem.ActionPlaces;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.actionSystem.impl.ActionMenuItem;
 import com.intellij.openapi.application.ModalityState;
-import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.fileEditor.ex.FileEditorManagerEx;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.impl.ProjectManagerImpl;
 import com.intellij.openapi.util.Pair;
-import com.intellij.openapi.util.SystemInfo;
-import com.intellij.openapi.wm.IdeFocusManager;
-import com.intellij.openapi.wm.impl.IdeFrameImpl;
-import com.intellij.util.BitUtil;
+import com.xin.util.ActiveUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.*;
-import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -62,33 +54,13 @@ public class GotoProjectAction extends GotoActionBase implements DumbAware {
         if (project == null) return;
 
         final GotoProjectModel gotoFileModel = new GotoProjectModel(project);
-        GotoActionBase.GotoActionCallback<IdeFrameImpl> callback = new GotoActionCallback<IdeFrameImpl>() {
+        GotoActionBase.GotoActionCallback<Project> callback = new GotoActionCallback<Project>() {
 
             @Override
             public void elementChosen(final ChooseByNamePopup popup, final Object element) {
 
-                if (element instanceof JFrameNavigate) {
-                    IdeFrameImpl projectFrame = ((JFrameNavigate) element).getIdeFrame();
-                    final int frameState = projectFrame.getExtendedState();
-                    boolean macMainMenu = SystemInfo.isMac && ActionPlaces.isMainMenuOrActionSearch(e.getPlace());
-                    if (macMainMenu && !(e.getInputEvent().getSource() instanceof ActionMenuItem) && (projectFrame.getExtendedState() & Frame.ICONIFIED) != 0) {
-                        // On Mac minimized window should not be restored this way
-                        return;
-                    }
-
-                    if (BitUtil.isSet(frameState, Frame.ICONIFIED)) {
-                        // restore the frame if it is minimized
-                        projectFrame.setExtendedState(frameState ^ Frame.ICONIFIED);
-                    }
-                    projectFrame.toFront();
-                    projectFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-                    IdeFocusManager.getGlobalInstance().doWhenFocusSettlesDown(() -> {
-                        IdeFocusManager.getGlobalInstance().requestFocus(((JFrameNavigate) element).getIdeFrame(), true);
-                        JComponent myEditorComponent = FileEditorManager.getInstance(projectFrame.getProject()).getSelectedTextEditor().getContentComponent();
-                        if (IdeFocusManager.getGlobalInstance().getFocusOwner() != myEditorComponent) { //IDEA-64501
-                            IdeFocusManager.getGlobalInstance().requestFocus(myEditorComponent, true);
-                        }
-                    });
+                if (element instanceof ProjectNavigate) {
+                    ActiveUtils.active(((ProjectNavigate) element).getProject(),e);
 
                 }
             }
@@ -96,7 +68,7 @@ public class GotoProjectAction extends GotoActionBase implements DumbAware {
 
         boolean mayRequestOpenInCurrentWindow = gotoFileModel.willOpenEditor() && FileEditorManagerEx.getInstanceEx(project).hasSplitOrUndockedWindows();
         Pair<String, Integer> start = getInitialText(true, e);
-        ;
+
         ChooseByNamePopup popup = myCreatePopup(project, gotoFileModel, new GotoProjectItemProvider(project, getPsiContext(e), gotoFileModel), start.first,
                                                 mayRequestOpenInCurrentWindow,
                                                 start.second);
@@ -136,8 +108,8 @@ public class GotoProjectAction extends GotoActionBase implements DumbAware {
                         int keyCode = e.getKeyCode();
                         switch (keyCode) {
                             case KeyEvent.VK_RIGHT:
-                                JFrameNavigate elementAt = (JFrameNavigate) myList.getModel().getElementAt(getSelectedIndex());
-                                ProjectManagerImpl.getInstance().closeProject(elementAt.getIdeFrame().getProject());
+                                ProjectNavigate elementAt = (ProjectNavigate) myList.getModel().getElementAt(getSelectedIndex());
+                                ProjectManagerImpl.getInstance().closeProject(elementAt.getProject());
                                 rebuildList(false);
                                 break;
                         }

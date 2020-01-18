@@ -15,7 +15,7 @@ public class MyStartupActivity implements StartupActivity {
 
     public static final String PROJECT_OPEN_HISTORY_LIST      = "PROJECT_OPEN_HISTORY_LIST";
     public static final String PROJECT_OPEN_HISTORY_WORKSPACE = "PROJECT_OPEN_HISTORY_WORKSPACE";
-    public static final int    PROJECT_OPEN_HISTORY_LIST_MAX  = 100;
+    public static final int    PROJECT_OPEN_HISTORY_LIST_MAX  = 1000;
     public static final String DELIMITER                      = "``";
 
 

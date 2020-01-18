@@ -2,32 +2,31 @@ package com.xin.gotoproject;
 
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.navigation.NavigationItem;
-import com.intellij.openapi.wm.impl.IdeFrameImpl;
+import com.intellij.openapi.project.Project;
 import com.intellij.psi.codeStyle.MinusculeMatcher;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * @author linxixin@cvte.com
  */
-public class JFrameNavigate implements NavigationItem {
+public class ProjectNavigate implements NavigationItem {
 
-    private IdeFrameImpl     ideFrame;
+    private Project project;
     private MinusculeMatcher pattern; 
     
-    public JFrameNavigate(IdeFrameImpl ideFrame, MinusculeMatcher pattern) {
-        this.ideFrame = ideFrame;
+    public ProjectNavigate(Project project, MinusculeMatcher pattern) {
+        this.project = project;
         this.pattern = pattern;
     }
 
-    public JFrameNavigate() {
+
+
+    public Project getProject() {
+        return project;
     }
 
-    public IdeFrameImpl getIdeFrame() {
-        return ideFrame;
-    }
-
-    public void setIdeFrame(IdeFrameImpl ideFrame) {
-        this.ideFrame = ideFrame;
+    public void setProject(Project project) {
+        this.project = project;
     }
 
     public MinusculeMatcher getPattern() {

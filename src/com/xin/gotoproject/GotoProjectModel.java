@@ -92,7 +92,7 @@ public class GotoProjectModel extends FilteringGotoByModel<IdeFrameImpl> impleme
     @Override
     @Nullable
     public String getFullName(final Object element) {
-        return element instanceof JFrameNavigate ? ((JFrameNavigate) element).getIdeFrame().getProject().getName() : "";
+        return element instanceof ProjectNavigate ? ((ProjectNavigate) element).getProject().getName() : "";
     }
 
 
