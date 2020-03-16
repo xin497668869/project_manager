@@ -7,6 +7,7 @@ import com.intellij.ide.util.gotoByName.ChooseByNamePopup;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.application.ModalityState;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileEditor.ex.FileEditorManagerEx;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
@@ -26,6 +27,7 @@ import static com.intellij.ide.util.gotoByName.ChooseByNamePopup.CHOOSE_BY_NAME_
  * @author linxixin@cvte.com
  */
 public class GotoNewProjectAction extends GotoActionBase implements DumbAware {
+    private final static Logger log = Logger.getInstance(GotoNewProjectAction.class);
 
     @Override
     public void gotoActionPerformed(AnActionEvent e) {
@@ -39,13 +41,22 @@ public class GotoNewProjectAction extends GotoActionBase implements DumbAware {
 
             @Override
             public void elementChosen(final ChooseByNamePopup popup, final Object element) {
+                log.info("elementChosen " + element + "  " );
+                if (element != null) {
+                    log.info("class "+element.getClass());
+                }
 
                 if (element instanceof GotoNewProjectItemNavigate) {
                     try {
                         String projectBasePath = ((GotoNewProjectItemNavigate) element).getProjectBasePath();
-                        if (new File(projectBasePath).exists()) {
+
+                        boolean exists = new File(projectBasePath).exists();
+                        log.info("projectBasePath "+projectBasePath+"  "+exists);
+                        if (exists) {
                             Project project1 = ProjectManagerEx.getInstanceEx()
                                                                .loadAndOpenProject(projectBasePath);
+                            log.info("project1 ");
+
                             ActiveUtils.active(project1, e);
                         }
                     } catch (IOException | JDOMException e1) {

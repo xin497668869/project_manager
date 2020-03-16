@@ -35,8 +35,18 @@ public class GotoNewProjectItemProvider extends DefaultChooseByNameItemProvider 
                                   boolean everywhere,
                                   @NotNull ProgressIndicator indicator,
                                   @NotNull Processor<Object> consumer) {
-
-        String[] values = PropertiesComponent.getInstance().getValues(PROJECT_OPEN_HISTORY_LIST);
+        if (pattern.contains("/") || pattern.contains("\\")) {
+            MinusculeMatcher minusculeMatcher = NameUtil.buildMatcher("*" + pattern + "*", NameUtil.MatchingCaseSensitivity.NONE);
+            GotoNewProjectItemNavigate gotoNewProjectItemNavigate = new GotoNewProjectItemNavigate("openDir``"+pattern, minusculeMatcher);
+            if (gotoNewProjectItemNavigate.getProjectFile()
+                                          .exists()) {
+                if (!consumer.process(gotoNewProjectItemNavigate)) {
+                    return true;
+                }
+            }
+        }
+        String[] values = PropertiesComponent.getInstance()
+                                             .getValues(PROJECT_OPEN_HISTORY_LIST);
         if (values == null) {
             return true;
         }
@@ -46,7 +56,8 @@ public class GotoNewProjectItemProvider extends DefaultChooseByNameItemProvider 
 
             if (minusculeMatcher.matches(projectPath)) {
                 GotoNewProjectItemNavigate gotoNewProjectItemNavigate = new GotoNewProjectItemNavigate(projectPath, minusculeMatcher);
-                if (gotoNewProjectItemNavigate.getProjectFile().exists()) {
+                if (gotoNewProjectItemNavigate.getProjectFile()
+                                              .exists()) {
                     if (!consumer.process(gotoNewProjectItemNavigate)) {
                         return true;
                     }
@@ -55,6 +66,5 @@ public class GotoNewProjectItemProvider extends DefaultChooseByNameItemProvider 
         }
         return true;
     }
-
 
 }

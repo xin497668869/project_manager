@@ -79,3 +79,4 @@ public class MyStartupActivity implements StartupActivity {
     }
 
 }
+
