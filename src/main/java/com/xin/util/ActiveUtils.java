@@ -9,8 +9,7 @@ import com.intellij.openapi.wm.WindowManager;
 import com.intellij.util.BitUtil;
 
 import javax.swing.*;
-import java.awt.Component;
-import java.awt.Frame;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 
 /**
@@ -19,6 +18,8 @@ import java.awt.event.KeyEvent;
  */
 public class ActiveUtils {
     private final static Logger log = Logger.getInstance(ActiveUtils.class);
+
+
 
     /**
      * 页面激活
@@ -42,7 +43,8 @@ public class ActiveUtils {
         }
 
         projectFrame.toFront();
-        projectFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        projectFrame.setExtendedState(JFrame.NORMAL);
+
         IdeFocusManager.getGlobalInstance()
                        .doWhenFocusSettlesDown(() -> {
 
@@ -55,5 +57,6 @@ public class ActiveUtils {
 
                        });
     }
-}
 
+
+}

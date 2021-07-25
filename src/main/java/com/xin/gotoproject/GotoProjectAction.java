@@ -54,7 +54,7 @@ public class GotoProjectAction extends GotoActionBase implements DumbAware {
         if (project == null) return;
 
         final GotoProjectModel gotoFileModel = new GotoProjectModel(project);
-        GotoActionBase.GotoActionCallback<Project> callback = new GotoActionCallback<Project>() {
+        GotoActionCallback<Project> callback = new GotoActionCallback<Project>() {
 
             @Override
             public void elementChosen(final ChooseByNamePopup popup, final Object element) {
@@ -102,16 +102,10 @@ public class GotoProjectAction extends GotoActionBase implements DumbAware {
                         if (myList.getSelectedValue() == EXTRA_ELEM) {
                             return;
                         }
-//                        if (!e.isAltDown()) {
-//                            return;
-//                        }
-                        int keyCode = e.getKeyCode();
-                        switch (keyCode) {
-                            case KeyEvent.VK_RIGHT:
-                                ProjectNavigate elementAt = (ProjectNavigate) myList.getModel().getElementAt(getSelectedIndex());
-                                ProjectManagerImpl.getInstance().closeProject(elementAt.getProject());
-                                rebuildList(false);
-                                break;
+                        if (e.isAltDown() && e.getKeyCode() == KeyEvent.VK_RIGHT){
+                            ProjectNavigate elementAt = (ProjectNavigate) myList.getModel().getElementAt(getSelectedIndex());
+                            ProjectManagerImpl.getInstance().closeProject(elementAt.getProject());
+                            rebuildList(false);
                         }
                     }
                 });
@@ -123,4 +117,5 @@ public class GotoProjectAction extends GotoActionBase implements DumbAware {
         }
         return newPopup;
     }
+
 }
