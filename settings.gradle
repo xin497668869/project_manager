@@ -1,0 +1,12 @@
+rootProject.name = 'project_manager'
+
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "org.jetbrains.intellij.plugins:gradle-intellij-plugin:1.1"
+    }
+}

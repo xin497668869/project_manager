@@ -13,7 +13,10 @@ import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ex.ProjectManagerEx;
 import com.intellij.openapi.util.Pair;
+import com.intellij.openapi.wm.IdeFrame;
+import com.intellij.openapi.wm.WindowManager;
 import com.xin.util.ActiveUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.jdom.JDOMException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -52,12 +55,17 @@ public class GotoNewProjectAction extends GotoActionBase implements DumbAware {
 
                         boolean exists = new File(projectBasePath).exists();
                         log.info("projectBasePath "+projectBasePath+"  "+exists);
-                        if (exists) {
-                            Project project1 = ProjectManagerEx.getInstanceEx()
-                                                               .loadAndOpenProject(projectBasePath);
-                            log.info("project1 ");
 
-                            ActiveUtils.active(project1, e);
+                        if (exists) {
+                            IdeFrame[] allProjectFrames = WindowManager.getInstance().getAllProjectFrames();
+                            for (IdeFrame ideFrame : allProjectFrames) {
+                                if (ideFrame.getProject() != null
+                                        && ideFrame.getProject().getName().equals(StringUtils.substringAfterLast(projectBasePath, "/"))){
+                                    ActiveUtils.active(ideFrame.getProject(), e);
+                                    return;
+                                }
+                            }
+                            ProjectManagerEx.getInstanceEx().loadAndOpenProject(projectBasePath);
                         }
                     } catch (IOException | JDOMException e1) {
                         e1.printStackTrace();
