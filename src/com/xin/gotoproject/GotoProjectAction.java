@@ -25,7 +25,6 @@ import static com.intellij.ide.util.gotoByName.ChooseByNamePopup.CHOOSE_BY_NAME_
  * @author linxixin@cvte.com
  */
 public class GotoProjectAction extends GotoActionBase implements DumbAware {
-    public static final String ID = "GotoFile";
 
     /*
 
@@ -61,7 +60,6 @@ public class GotoProjectAction extends GotoActionBase implements DumbAware {
 
                 if (element instanceof ProjectNavigate) {
                     ActiveUtils.active(((ProjectNavigate) element).getProject(),e);
-
                 }
             }
         };

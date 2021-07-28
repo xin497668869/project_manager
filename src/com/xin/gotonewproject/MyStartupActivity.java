@@ -5,7 +5,6 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.startup.StartupActivity;
-import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -49,7 +48,7 @@ public class MyStartupActivity implements StartupActivity {
             if (values[i] == null) {
                 break;
             }
-            String[] split = StringUtils.split(values[i], DELIMITER);
+            String[] split = values[i].split(DELIMITER);
             if (split[0].equals(projectInfo.getProjectName()) && split[1].equals(projectInfo.getProjectPath().replace("\\", "/"))) {
                 break;
             }

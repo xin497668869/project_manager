@@ -5,7 +5,6 @@ import com.intellij.navigation.ItemPresentation;
 import com.intellij.navigation.NavigationItem;
 import com.intellij.openapi.module.ModuleTypeManager;
 import com.intellij.psi.codeStyle.MinusculeMatcher;
-import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
@@ -25,12 +24,12 @@ public class GotoNewProjectItemNavigate implements NavigationItem {
     private MinusculeMatcher pattern;
 
     public GotoNewProjectItemNavigate(String projectBasePath, MinusculeMatcher pattern) {
-        String[] split = StringUtils.split(projectBasePath, DELIMITER);
+        String[] split = projectBasePath.split(DELIMITER);
 
         this.projectBasePath = split[1];
         this.projectFile = new File(this.projectBasePath);
         this.projectName = split[0];
-        if (split.length > 2 && StringUtils.isEmpty(split[2])) {
+        if (split.length > 2 && (split[2] == null ||split[2].isEmpty())) {
             this.icon = AllIcons.Nodes.IdeaModule;
         } else {
             this.icon = ModuleTypeManager.getInstance().findByID(split[1]).getIcon();

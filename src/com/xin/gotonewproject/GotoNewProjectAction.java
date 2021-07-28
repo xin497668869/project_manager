@@ -1,6 +1,9 @@
 package com.xin.gotonewproject;
 
 import com.intellij.ide.actions.GotoActionBase;
+import com.intellij.ide.impl.OpenProjectTask;
+import com.intellij.ide.impl.ProjectUtil;
+import com.intellij.ide.projectView.impl.ProjectViewImpl;
 import com.intellij.ide.util.gotoByName.ChooseByNameItemProvider;
 import com.intellij.ide.util.gotoByName.ChooseByNameModel;
 import com.intellij.ide.util.gotoByName.ChooseByNamePopup;
@@ -8,18 +11,17 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.application.ModalityState;
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.fileEditor.ex.FileEditorManagerEx;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.project.ex.ProjectManagerEx;
 import com.intellij.openapi.util.Pair;
 import com.xin.util.ActiveUtils;
-import org.jdom.JDOMException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
-import java.io.IOException;
+import java.nio.file.Paths;
 
 import static com.intellij.ide.util.gotoByName.ChooseByNamePopup.CHOOSE_BY_NAME_POPUP_IN_PROJECT_KEY;
 
@@ -47,20 +49,12 @@ public class GotoNewProjectAction extends GotoActionBase implements DumbAware {
                 }
 
                 if (element instanceof GotoNewProjectItemNavigate) {
-                    try {
-                        String projectBasePath = ((GotoNewProjectItemNavigate) element).getProjectBasePath();
+                    String projectBasePath = ((GotoNewProjectItemNavigate) element).getProjectBasePath();
 
-                        boolean exists = new File(projectBasePath).exists();
-                        log.info("projectBasePath "+projectBasePath+"  "+exists);
-                        if (exists) {
-                            Project project1 = ProjectManagerEx.getInstanceEx()
-                                                               .loadAndOpenProject(projectBasePath);
-                            log.info("project1 ");
-
-                            ActiveUtils.active(project1, e);
-                        }
-                    } catch (IOException | JDOMException e1) {
-                        e1.printStackTrace();
+                    boolean exists = new File(projectBasePath).exists();
+                    if (exists) {
+                        Project newProject = ProjectUtil.openOrImport(Paths.get(projectBasePath), new OpenProjectTask());
+                        ActiveUtils.active(newProject, e);
                     }
                 }
             }
