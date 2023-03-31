@@ -3,8 +3,8 @@ plugins {
     id 'org.jetbrains.intellij'
 }
 
-group 'org.example'
-version '2.1'
+group 'com.xin.ideaplugin'
+version '2023.1'
 
 repositories {
     mavenCentral()
@@ -17,8 +17,9 @@ dependencies {
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-    version = '2021.1'
+    version = 'LATEST-EAP-SNAPSHOT'
 }
+
 patchPluginXml {
     changeNotes = """
       Add change notes here.<br>
@@ -26,4 +27,10 @@ patchPluginXml {
 }
 test {
     useJUnitPlatform()
+}
+
+tasks {
+    patchPluginXml {
+        sinceBuild.set("223.8836")
+    }
 }

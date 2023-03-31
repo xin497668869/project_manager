@@ -1,6 +1,6 @@
 <idea-plugin>
-    <id>project_manager</id>
-    <name>project_manager</name>
+    <id>com.xin.ideaplugin.project-manager</id>
+    <name>project-manager</name>
     <version>2.0</version>
     <vendor email="497668869@qq.com" url="https://github.com/xin497668869"></vendor>
 
@@ -15,7 +15,7 @@
     </change-notes>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
-    <idea-version since-build="212.0"/>
+    <!--    <idea-version since-build="212.0"/>-->
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
          on how to target different products -->

@@ -25,7 +25,7 @@ public class SearchProjectInfoAction extends AnAction {
             workspaces = "";
         }
 
-        workspaces = Messages.showInputDialog(project, "è¯·å¡«å†™workspaceæ¥æœç´¢é¡¹ç›®, å¤šä¸ªè·¯å¾„ç”¨ ; åˆ†å‰²è·¯å¾„", "Tips", null, workspaces, null);
+        workspaces = Messages.showInputDialog(project, "ÇëÌîĞ´workspaceÀ´ËÑË÷ÏîÄ¿, ¶à¸öÂ·¾¶ÓÃ ; ·Ö¸îÂ·¾¶", "Tips", null, workspaces, null);
         if (validateWorkSpace(project, workspaces)) {
             ProgressManager.getInstance()
                            .run(new ProjectInitTask(project, workspaces));
@@ -37,7 +37,7 @@ public class SearchProjectInfoAction extends AnAction {
             while (true) {
                 for (String workspace : workspaces.split(";")) {
                     if (!new File(workspace).exists()) {
-                        workspaces = Messages.showInputDialog(project, "é”™è¯¯çš„workspaceè·¯å¾„", "Tips", null, "workspace", null);
+                        workspaces = Messages.showInputDialog(project, "´íÎóµÄworkspaceÂ·¾¶", "Tips", null, "workspace", null);
                         if (StringUtils.isEmpty(workspaces)) {
                             return false;
                         }

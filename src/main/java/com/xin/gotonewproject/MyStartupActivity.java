@@ -4,23 +4,26 @@ import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.startup.ProjectActivity;
 import com.intellij.openapi.startup.StartupActivity;
+import kotlin.Unit;
+import kotlin.coroutines.Continuation;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author linxixin@cvte.com
  */
-public class MyStartupActivity implements StartupActivity {
+public class MyStartupActivity implements StartupActivity, ProjectActivity {
 
-    public static final String PROJECT_OPEN_HISTORY_LIST      = "PROJECT_OPEN_HISTORY_LIST";
+    public static final String PROJECT_OPEN_HISTORY_LIST = "PROJECT_OPEN_HISTORY_LIST";
     public static final String PROJECT_OPEN_HISTORY_WORKSPACE = "PROJECT_OPEN_HISTORY_WORKSPACE";
-    public static final int    PROJECT_OPEN_HISTORY_LIST_MAX  = 1000;
-    public static final String DELIMITER                      = "``";
+    public static final int PROJECT_OPEN_HISTORY_LIST_MAX = 1000;
+    public static final String DELIMITER = "``";
 
 
     @Override
     public void runActivity(@NotNull Project project) {
-
         if (PropertiesComponent.getInstance().getValue(PROJECT_OPEN_HISTORY_WORKSPACE) == null) {
             storeProjectInfo(new SearchProjectInfoAction.ProjectInfo(project.getName(), project.getBasePath().replace("\\", "/"), getProjectIconId(project), 0));
             PropertiesComponent.getInstance().setValue(PROJECT_OPEN_HISTORY_WORKSPACE,"");
@@ -77,5 +80,10 @@ public class MyStartupActivity implements StartupActivity {
         return sortedModules[0].getModuleTypeName();
     }
 
+    @Nullable
+    @Override
+    public Object execute(@NotNull Project project, @NotNull Continuation<? super Unit> continuation) {
+        return null;
+    }
 }
 

@@ -2,7 +2,7 @@
 package com.xin.gotonewproject;
 
 import com.intellij.ide.util.PropertiesComponent;
-import com.intellij.ide.util.gotoByName.ChooseByNameBase;
+import com.intellij.ide.util.gotoByName.ChooseByNameViewModel;
 import com.intellij.ide.util.gotoByName.DefaultChooseByNameItemProvider;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.project.Project;
@@ -30,16 +30,16 @@ public class GotoNewProjectItemProvider extends DefaultChooseByNameItemProvider 
     }
 
     @Override
-    public boolean filterElements(@NotNull ChooseByNameBase base,
+    public boolean filterElements(@NotNull ChooseByNameViewModel base,
                                   @NotNull String pattern,
                                   boolean everywhere,
                                   @NotNull ProgressIndicator indicator,
                                   @NotNull Processor<Object> consumer) {
         if (pattern.contains("/") || pattern.contains("\\")) {
             MinusculeMatcher minusculeMatcher = NameUtil.buildMatcher("*" + pattern + "*", NameUtil.MatchingCaseSensitivity.NONE);
-            GotoNewProjectItemNavigate gotoNewProjectItemNavigate = new GotoNewProjectItemNavigate("openDir``"+pattern, minusculeMatcher);
+            GotoNewProjectItemNavigate gotoNewProjectItemNavigate = new GotoNewProjectItemNavigate("openDir``" + pattern, minusculeMatcher);
             if (gotoNewProjectItemNavigate.getProjectFile()
-                                          .exists()) {
+                    .exists()) {
                 if (!consumer.process(gotoNewProjectItemNavigate)) {
                     return true;
                 }

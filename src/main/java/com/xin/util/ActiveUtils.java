@@ -18,7 +18,7 @@ import java.awt.event.KeyEvent;
 public class ActiveUtils {
 
     /**
-     * 页面激活
+     * ҳ�漤��
      */
     public static void active(Project project, AnActionEvent e) {
         if (project != null) {

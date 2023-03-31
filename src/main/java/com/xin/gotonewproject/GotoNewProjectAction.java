@@ -1,9 +1,7 @@
 package com.xin.gotonewproject;
 
 import com.intellij.ide.actions.GotoActionBase;
-import com.intellij.ide.impl.OpenProjectTask;
 import com.intellij.ide.impl.ProjectUtil;
-import com.intellij.ide.projectView.impl.ProjectViewImpl;
 import com.intellij.ide.util.gotoByName.ChooseByNameItemProvider;
 import com.intellij.ide.util.gotoByName.ChooseByNameModel;
 import com.intellij.ide.util.gotoByName.ChooseByNamePopup;
@@ -11,7 +9,6 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.application.ModalityState;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.fileEditor.ex.FileEditorManagerEx;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
@@ -53,7 +50,7 @@ public class GotoNewProjectAction extends GotoActionBase implements DumbAware {
 
                     boolean exists = new File(projectBasePath).exists();
                     if (exists) {
-                        Project newProject = ProjectUtil.openOrImport(Paths.get(projectBasePath), new OpenProjectTask());
+                        Project newProject = ProjectUtil.openOrImport(Paths.get(projectBasePath), null, false);
                         ActiveUtils.active(newProject, e);
                     }
                 }

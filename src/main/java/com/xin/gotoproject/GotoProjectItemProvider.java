@@ -1,7 +1,7 @@
 // Copyright 2000-2017 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.xin.gotoproject;
 
-import com.intellij.ide.util.gotoByName.ChooseByNameBase;
+import com.intellij.ide.util.gotoByName.ChooseByNameViewModel;
 import com.intellij.ide.util.gotoByName.DefaultChooseByNameItemProvider;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.project.Project;
@@ -27,14 +27,14 @@ public class GotoProjectItemProvider extends DefaultChooseByNameItemProvider {
     }
 
     @Override
-    public boolean filterElements(@NotNull ChooseByNameBase base,
+    public boolean filterElements(@NotNull ChooseByNameViewModel base,
                                   @NotNull String pattern,
                                   boolean everywhere,
                                   @NotNull ProgressIndicator indicator,
                                   @NotNull Processor<Object> consumer) {
 
         IdeFrame[] allProjectFrames = WindowManager.getInstance()
-                                                   .getAllProjectFrames();
+                .getAllProjectFrames();
         MinusculeMatcher minusculeMatcher = NameUtil.buildMatcher("*" + pattern + "*", NameUtil.MatchingCaseSensitivity.NONE);
         ProjectNavigate activeProjectNavigate = null;
         for (IdeFrame ideFrame : allProjectFrames) {

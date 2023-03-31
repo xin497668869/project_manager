@@ -13,7 +13,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.wm.ex.WindowManagerEx;
 import com.intellij.openapi.wm.impl.IdeFrameImpl;
-import com.intellij.util.indexing.FileBasedIndex;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -86,7 +85,7 @@ public class GotoNewProjectModel extends FilteringGotoByModel<IdeFrameImpl> impl
 
     @Override
     public boolean sameNamesForProjectAndLibraries() {
-        return !FileBasedIndex.ourEnableTracingOfKeyHashToVirtualFileMapping;
+        return false;
     }
 
     @Override
