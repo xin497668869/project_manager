@@ -17,13 +17,14 @@ import com.xin.util.ActiveUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.security.auth.callback.Callback;
 import java.io.File;
 import java.nio.file.Paths;
 
 import static com.intellij.ide.util.gotoByName.ChooseByNamePopup.CHOOSE_BY_NAME_POPUP_IN_PROJECT_KEY;
 
 /**
- * @author linxixin@cvte.com
+ * @author 497668869@qq.com
  */
 public class GotoNewProjectAction extends GotoActionBase implements DumbAware {
     private final static Logger log = Logger.getInstance(GotoNewProjectAction.class);

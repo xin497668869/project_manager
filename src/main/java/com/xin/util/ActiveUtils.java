@@ -8,11 +8,11 @@ import com.intellij.openapi.wm.WindowManager;
 import com.intellij.util.BitUtil;
 
 import javax.swing.*;
-import java.awt.Component;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 
 /**
- * @author linxixin@cvte.com
+ * @author 497668869@qq.com
  * @since 1.0
  */
 public class ActiveUtils {

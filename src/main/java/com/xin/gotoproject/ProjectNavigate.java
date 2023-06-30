@@ -7,7 +7,7 @@ import com.intellij.psi.codeStyle.MinusculeMatcher;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * @author linxixin@cvte.com
+ * @author 497668869@qq.com
  */
 public class ProjectNavigate implements NavigationItem {
 

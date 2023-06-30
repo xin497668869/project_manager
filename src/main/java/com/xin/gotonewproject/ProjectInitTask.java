@@ -16,7 +16,7 @@ import static com.xin.gotonewproject.MyStartupActivity.PROJECT_OPEN_HISTORY_LIST
 import static com.xin.gotonewproject.MyStartupActivity.PROJECT_OPEN_HISTORY_WORKSPACE;
 
 /**
- * @author linxixin@cvte.com
+ * @author 497668869@qq.com
  */
 public class ProjectInitTask extends Backgroundable {
     private boolean stopScan = true;

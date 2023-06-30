@@ -1,7 +1,6 @@
 package com.xin.gotonewproject;
 
 import com.intellij.ide.util.PropertiesComponent;
-import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.startup.ProjectActivity;
@@ -12,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * @author linxixin@cvte.com
+ * @author 497668869@qq.com
  */
 public class MyStartupActivity implements StartupActivity, ProjectActivity {
 

@@ -13,7 +13,7 @@ import java.io.File;
 import static com.xin.gotonewproject.MyStartupActivity.DELIMITER;
 
 /**
- * @author linxixin@cvte.com
+ * @author 497668869@qq.com
  */
 public class GotoNewProjectItemNavigate implements NavigationItem {
 
